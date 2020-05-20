@@ -1,7 +1,12 @@
 package com.example.lab4;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -33,12 +38,32 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(this.adapter);
-
-
-
-
-
-
-
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            String nowy = (String) extras.get("wpis");
+            target.add(nowy);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void nowyWpis(MenuItem mi) {
+        Intent intencja = new Intent(this, DodajWpis.class);
+        startActivityForResult(intencja, 1);
+    }
+
+
 }
