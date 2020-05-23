@@ -34,7 +34,7 @@ public class MySQLite extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void add(Animal zwierz) {
+    public void dodaj(Animal zwierz) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -69,7 +69,7 @@ public class MySQLite extends SQLiteOpenHelper {
         return i;
     }
 
-    public Animal pobierz(String id) {
+    public Animal pobierz(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query("animals", //a. table name

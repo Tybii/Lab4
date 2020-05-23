@@ -7,13 +7,14 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.ListView;
-
+import android.view.View;
 import android.os.Bundle;
-
-
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +46,23 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(this.adapter);
+
+
+
+    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            TextView name = (TextView) view.findViewById(android.R.id.text1);
+            Animal zwierz = db.pobierz(Integer.parseInt(name.getText().toString()));
+            Intent intent = new Intent(getApplicationContext(), DodajWpis.class);
+            intent.putExtra("element", zwierz);
+            startActivityForResult(intent, 2);
+        }
+    });
     }
+
+
+
 
 
     @Override
@@ -62,10 +79,25 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Animal nowy = (Animal) extras.get("nowy");
-            this.db.add(nowy);
+            this.db.dodaj(nowy);
             adapter.changeCursor(db.lista());
             adapter.notifyDataSetChanged();
         }
+
+            if (requestCode == 2 && resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                Animal nowy = (Animal) extras.get("nowy");
+                this.db.aktualizuj(nowy);
+                adapter.changeCursor(db.lista());
+                adapter.notifyDataSetChanged();
+            }
+
+
+
+
+
+
+
     }
 
     public void nowyWpis(MenuItem mi) {
