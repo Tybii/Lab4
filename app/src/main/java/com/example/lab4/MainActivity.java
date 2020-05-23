@@ -22,12 +22,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> target;
     private SimpleCursorAdapter adapter;
+    MySQLite db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MySQLite db = new MySQLite(this);
+        db = new MySQLite(this);
 
         target = new ArrayList<>();
         String[] values = new String[]{
@@ -59,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            String nowy = (String) extras.get("wpis");
-            target.add(nowy);
+            Animal nowy = (Animal) extras.get("nowy");
+            this.db.add(nowy);
+            adapter.changeCursor(db.lista());
             adapter.notifyDataSetChanged();
         }
     }

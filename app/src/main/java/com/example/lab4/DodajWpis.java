@@ -5,20 +5,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class DodajWpis extends AppCompatActivity {
+    private ArrayAdapter gatunki;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodaj_wpis);
+        gatunki = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, new String[] {"SSak", "Gad", "Ptak"});
+        Spinner spinner = findViewById(R.id.gatunekSpinner);
+        spinner.setAdapter(gatunki);
     }
 
     public void wyslij(View view) {
-        EditText editText = (EditText) findViewById(R.id.editText);
+        Animal zwierze = new Animal(
+                ((Spinner) findViewById(R.id.gatunekSpinner)).getSelectedItem().toString(),
+                ((EditText) findViewById(R.id.kolorText)).getText().toString(),
+                Float.parseFloat(((EditText) findViewById(R.id.wielkoscText)).getText().toString()),
+                ((EditText) findViewById(R.id.opisText)).getText().toString()
+        );
+
         Intent intention = new Intent();
-        intention.putExtra("wpis", editText.getText().toString());
+        intention.putExtra("nowy", zwierze);
         setResult(RESULT_OK, intention);
         finish();
     }
